@@ -10,34 +10,28 @@
 package au.edu.rmit.ct;
 
 import static org.junit.jupiter.api.Assertions.*;
-
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
+import static java.time.Duration.ofMillis;
 
 class DepositSlotTimedTestSimpleRepeatS3829221 {
 
+	static DepositSlotTimed depositSlotTimed;
+
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
-	}
-
-	@AfterAll
-	static void tearDownAfterClass() throws Exception {
-	}
-
-	@BeforeEach
-	void setUp() throws Exception {
-	}
-
-	@AfterEach
-	void tearDown() throws Exception {
+		depositSlotTimed = new DepositSlotTimed("Main");
 	}
 
 	@Test
-	void test() {
-		fail("Not yet implemented");
+	@RepeatedTest(10)
+	@DisplayName("Testing the running duration of deposit slot")
+	void RepTestDepositSlotDuration() {
+		// The ideal margin that causes 5 repeated tests to fail is 11 ms
+		assertTimeout(ofMillis(1211), () -> {
+			depositSlotTimed.checkTimer();
+		});
 	}
-
 }
