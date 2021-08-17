@@ -9,12 +9,9 @@
 
 package au.edu.rmit.ct;
 
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,8 +22,8 @@ import org.junit.jupiter.api.Test;
 class BankDatabaseNewTestConstructorsS3829221 {
 
 	static BankDatabaseNew bankDatabaseNew;
-	static ArrayList<CustomerAccount> seedCustomers;
 	static CustomerAccount acc1, acc2;
+	ArrayList<CustomerAccount> seedCustomers;
 
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
@@ -34,17 +31,9 @@ class BankDatabaseNewTestConstructorsS3829221 {
 		acc2 = new CustomerAccount(1002, 5678, 2000, 2000, "Rum", "Asaka", 795483);
 	}
 
-	@AfterAll
-	static void tearDownAfterClass() throws Exception {
-	}
-
 	@BeforeEach
 	void setUp() throws Exception {
 		seedCustomers = new ArrayList<>();
-	}
-
-	@AfterEach
-	void tearDown() throws Exception {
 	}
 
 	@Test
@@ -54,10 +43,10 @@ class BankDatabaseNewTestConstructorsS3829221 {
 
 		assertTrue(bankDatabaseNew.isEmpty());
 		assertEquals(0, bankDatabaseNew.size());
-		assertEquals(1000.0, bankDatabaseNew.getAvailableBalance(12345), 0.1);
-		assertEquals(1200.0, bankDatabaseNew.getTotalBalance(12345), 0.1);
-		assertEquals(200.0, bankDatabaseNew.getAvailableBalance(98765), 0.1);
-		assertEquals(200.0, bankDatabaseNew.getTotalBalance(98765), 0.1);
+		assertEquals(1000.0, bankDatabaseNew.getAvailableBalance(12345));
+		assertEquals(1200.0, bankDatabaseNew.getTotalBalance(12345));
+		assertEquals(200.0, bankDatabaseNew.getAvailableBalance(98765));
+		assertEquals(200.0, bankDatabaseNew.getTotalBalance(98765));
 	}
 
 	@Nested
@@ -95,17 +84,17 @@ class BankDatabaseNewTestConstructorsS3829221 {
 			Assertions.assertThrows(Exception.class, () -> {
 				new CustomerAccount(1003, 123, 1000, 1200, "Laurent", "Victorie", 640139);
 			});
-			
+
 			try {
 				new CustomerAccount(1003, 123, 1000, 1200, "Laurent", "Victorie", 640139);
 			} catch (Exception e) {
 				assertEquals("Pin number too short, must be > 999 ", e.getMessage());
 			}
-			
+
 			Assertions.assertThrows(Exception.class, () -> {
 				new CustomerAccount(1003, 12345, 1000, 1200, "Laurent", "Victorie", 640139);
 			});
-			
+
 			try {
 				new CustomerAccount(1003, 12345, 1000, 1200, "Laurent", "Victorie", 640139);
 			} catch (Exception e) {
@@ -115,7 +104,7 @@ class BankDatabaseNewTestConstructorsS3829221 {
 	}
 
 	@Nested
-	@DisplayName("Testing of adding customer account into bank database")
+	@DisplayName("Adding customer account into bank database")
 	class TestAddCustomerAccount {
 		@Test
 		@DisplayName("...checking if the customer account is added")
@@ -124,13 +113,13 @@ class BankDatabaseNewTestConstructorsS3829221 {
 			bankDatabaseNew = new BankDatabaseNew(seedCustomers);
 			int bankSize = bankDatabaseNew.size();
 			bankDatabaseNew.add(acc2);
-			
+
 			assertEquals(bankSize + 1, bankDatabaseNew.size());
-			
+
 			List<CustomerAccount> expected = new ArrayList<CustomerAccount>();
 			expected.add(acc1);
 			expected.add(acc2);
-			
+
 			assertEquals(expected, bankDatabaseNew.export());
 		}
 
@@ -139,11 +128,11 @@ class BankDatabaseNewTestConstructorsS3829221 {
 		void throwExceptionInAdd() throws Exception {
 			seedCustomers.add(acc1);
 			bankDatabaseNew = new BankDatabaseNew(seedCustomers);
-			
+
 			Assertions.assertThrows(Exception.class, () -> {
 				bankDatabaseNew.add(acc1);
 			});
-			
+
 			try {
 				bankDatabaseNew.add(acc1);
 			} catch (Exception e) {
