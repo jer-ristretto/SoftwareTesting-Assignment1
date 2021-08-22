@@ -30,7 +30,7 @@ class DepositSlotTimedTestSimpleRepeatS3829221 {
 	@DisplayName("Testing the running duration of deposit slot")
 	void RepTestDepositSlotDuration() {
 		// The ideal margin that causes 5 repeated tests to fail is 11 ms
-		assertTimeout(ofMillis(1211), () -> {
+		assertTimeout(ofMillis(1210), () -> {
 			depositSlotTimed.checkTimer();
 		});
 	}

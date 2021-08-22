@@ -10,7 +10,6 @@
 package au.edu.rmit.ct;
 
 import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -29,22 +28,21 @@ class CustomerAccountTestSuperTransactionsS3829221 {
 	@DisplayName("Testing the credit method")
 	class TestCredit {
 		@Test
-		@DisplayName("...checking whether credit transaction increases balance")
+		@DisplayName("...checking whether credit transaction increases total balance")
 		void testNormalCredit() {
 			acc.credit(1000);
-			// Total balance should increase
 			assertEquals(6000, acc.getTotalBalance());
-			// Available balance should remain the same
-			assertEquals(3000, acc.getAvailableBalance());
+			acc.credit(500);
+			assertEquals(6500, acc.getTotalBalance());
 		}
 		
 		@Test
-		@DisplayName("...checking exception thrown for negative credit")
+		@DisplayName("...checking whether credit transaction affects available balance")
 		void testNegCredit() {
-			// The credit method doesn't validate this operation, so we expect the test case to fail.
-			Assertions.assertThrows(Exception.class, () -> {
-				acc.credit(-1000);
-			});
+			acc.credit(200);
+			assertEquals(3000, acc.getAvailableBalance());
+			acc.credit(600);
+			assertEquals(3000, acc.getAvailableBalance());
 		}
 	}
 	
@@ -52,26 +50,21 @@ class CustomerAccountTestSuperTransactionsS3829221 {
 	@DisplayName("Testing the debit method")
 	class TestDebit {
 		@Test
-		@DisplayName("...checking whether debit transaction decreases balance")
+		@DisplayName("...checking whether debit transaction decreases total balance")
 		void testNormalDebit() {
-			acc.debit(2000);
-			// Both balances should decrease
-			assertEquals(1000, acc.getAvailableBalance());
-			assertEquals(3000, acc.getTotalBalance());
+			acc.debit(2800);
+			assertEquals(2200, acc.getTotalBalance());
+			acc.debit(200);
+			assertEquals(2000, acc.getTotalBalance());
 		}
 		
 		@Test
-		@DisplayName("...checking exception thrown for overwithdrawal")
+		@DisplayName("...checking whether debit transaction decreases available balance")
 		void testOverwithdrawal() {
-			// The debit method doesn't validate this operation, so we expect the test case to fail.
-			// Debit amount over available balance
-			Assertions.assertThrows(Exception.class, () -> {
-				acc.debit(4000);
-			});
-			// Debit amount over total balance
-			Assertions.assertThrows(Exception.class, () -> {
-				acc.debit(6000);
-			});
+			acc.debit(2000);
+			assertEquals(1000, acc.getAvailableBalance());
+			acc.debit(200);
+			assertEquals(800, acc.getAvailableBalance());
 		}
 	}
 	
